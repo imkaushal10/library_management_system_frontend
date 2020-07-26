@@ -12,7 +12,7 @@ export default class RegisterForm extends Component {
         this.state = {
             firstname: '',
             lastname: '',
-            username: '',
+            email: '',
             password: '',
             isRegistered: false
         }
@@ -36,7 +36,7 @@ export default class RegisterForm extends Component {
     
     
     render() {
-        let {username, password, firstname, lastname, isRegistered} = this.state;
+        let {email, password, firstname, lastname, isRegistered} = this.state;
         if(isRegistered){
             return <Redirect to='/'/>;
         }
@@ -55,9 +55,9 @@ export default class RegisterForm extends Component {
                         value={lastname} onChange= {this.handleChange}/>         
                     </FormGroup>
                     <FormGroup>
-                        <Label for="username">Username</Label>
-                        <Input type='text' name="username" id="username" 
-                        value={username} onChange= {this.handleChange}/>         
+                        <Label for="email">Email</Label>
+                        <Input type='text' name="email" id="email" 
+                        value={email} onChange= {this.handleChange}/>         
                     </FormGroup>
 
                     <FormGroup>

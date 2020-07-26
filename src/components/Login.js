@@ -10,7 +10,7 @@ export default class Login extends Component {
         super(props)
     
         this.state = {
-            username: '',
+            email: '',
             password: '',
             isloggedin: false
         }
@@ -25,7 +25,7 @@ export default class Login extends Component {
     handleLogin = (e)=>{
         e.preventDefault();
         axios.post('http://localhost:3001/users/login', { 
-        username: this.state.username,
+        username: this.state.email,
         password: this.state.password
         }).then((res)=>{
             console.log(res);
@@ -38,7 +38,7 @@ export default class Login extends Component {
     
     
     render() {
-        let {username, password, isloggedin} = this.state;
+        let {email, password, isloggedin} = this.state;
         if(isloggedin){
             return <Redirect to='/dashboard' />
         }
@@ -46,9 +46,9 @@ export default class Login extends Component {
             <div className='container'>
                 <Form>
                     <FormGroup>
-                        <Label for="username">Username</Label>
-                        <Input type='text' name="username" id="username" 
-                        value={username} onChange= {this.handleChange}/>         
+                        <Label for="email">Email</Label>
+                        <Input type='text' name="email" id="email" 
+                        value={email} onChange= {this.handleChange}/>         
                     </FormGroup>
 
                     <FormGroup>
