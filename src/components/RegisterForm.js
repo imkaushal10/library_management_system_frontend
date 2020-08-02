@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Form, FormGroup, Label, Input, Button, Card, CardBody } from 'reactstrap';
 
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
@@ -41,34 +41,42 @@ export default class RegisterForm extends Component {
             return <Redirect to='/'/>;
         }
         return (
-            <div className='container'>
-                <Form>
-                    <FormGroup>
-                        <Label for="firstname">Firstname</Label>
-                        <Input type='text' name="firstname" id="firstname" 
-                        value={firstname} onChange = {this.handleChange}/>         
-                    </FormGroup>
 
-                    <FormGroup>
-                        <Label for="lastname">Lastname</Label>
-                        <Input type='text' name="lastname" id="lastname" 
-                        value={lastname} onChange= {this.handleChange}/>         
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="email">Email</Label>
-                        <Input type='text' name="email" id="email" 
-                        value={email} onChange= {this.handleChange}/>         
-                    </FormGroup>
+        <div className="d-flex justify-content-center signupform">    
+            <Card className="bg-light mt-5"  style = {{width: "400px"}}>
 
-                    <FormGroup>
-                        <Label for="password">Password</Label>
-                        <Input type='password' name="password" id="password" 
-                        value={password} onChange= {this.handleChange}/>         
-                    </FormGroup>
+            <h3 className="text-center">REGISTER</h3>
+                <CardBody>
+                    <Form>
+                        <FormGroup>
+                            <Label for="firstname">Firstname</Label>
+                            <Input type='text' name="firstname" id="firstname" 
+                            value={firstname} onChange = {this.handleChange}/>         
+                        </FormGroup>
 
-                    <Button color='primary' block onClick= {this.handleRegister}>Sign Up</Button>
-                </Form>
-            </div>
+                        <FormGroup>
+                            <Label for="lastname">Lastname</Label>
+                            <Input type='text' name="lastname" id="lastname" 
+                            value={lastname} onChange= {this.handleChange}/>         
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="email">Email</Label>
+                            <Input type='text' name="email" id="email" 
+                            value={email} onChange= {this.handleChange}/>         
+                        </FormGroup>
+
+                        <FormGroup>
+                            <Label for="password">Password</Label>
+                            <Input type='password' name="password" id="password" 
+                            value={password} onChange= {this.handleChange}/>         
+                        </FormGroup>
+
+                        <Button className="btn btn-info" block onClick= {this.handleRegister}>Sign Up</Button>
+                    </Form>
+                </CardBody>
+            </Card>
+
+        </div>      
         )
     }
 }

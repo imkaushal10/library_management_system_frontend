@@ -44,50 +44,6 @@ export default class Dashboard extends Component {
             </ListGroup>
             </div>
 
-            
-            // <div className="container">
-            //     <Form>
-            //         <FormGroup>
-            //             <Label for="title">Title</Label>
-            //             <Input type="text" name="title" placeholder="book title" />
-            //          </FormGroup>
-
-            //          <FormGroup>
-            //             <Label>Author</Label>
-            //             <Input type="text" name="author" placeholder="book author" />
-            //          </FormGroup>
-
-            //          <FormGroup>
-            //             <Label>Publisher</Label>
-            //             <Input type="text" name="publisher" placeholder="book publisher" />
-            //          </FormGroup>
-
-            //          <FormGroup>
-            //             <Label>Number of Pages</Label>
-            //             <Input type="text" name="numberofpages" placeholder="pages" />
-            //          </FormGroup>
-
-            //          <FormGroup>
-            //             <Label>Format</Label><br/>
-            //             <select type="text" name="format"> 
-            //                 <option>Hardcover</option>
-            //                 <option>Magazine</option>
-            //                 <option>Article</option>
-            //             </select>
-            //          </FormGroup>
-
-            //          <FormGroup>
-            //             <Label>Published Year</Label>
-            //             <Input type="number" name="published_year" placeholder="year" />
-            //          </FormGroup>
-
-            //          <FormGroup>
-            //             <Label>Image</Label>
-            //             <Input type="file" name="image"/>
-            //          </FormGroup>
-            //          <Button color="warning">Add Book</Button>
-            //    </Form>
-            // </div>
         )
     }
 }

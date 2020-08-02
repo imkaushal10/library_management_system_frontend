@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Form, FormGroup, Label, Input, Button, Card, CardBody } from 'reactstrap';
 
 import axios from 'axios';
 import {Redirect} from 'react-router-dom';
@@ -12,6 +12,7 @@ export default class Login extends Component {
         this.state = {
             email: '',
             password: '',
+            // role: '',
             isloggedin: false
         }
     }
@@ -25,13 +26,14 @@ export default class Login extends Component {
     handleLogin = (e)=>{
         e.preventDefault();
         axios.post('http://localhost:3001/users/login', { 
-        username: this.state.email,
-        password: this.state.password
+        email: this.state.email,
+        password: this.state.password,
+        // role: this.state.role
         }).then((res)=>{
             console.log(res);
             localStorage.setItem('token', res.data.token);
             this.setState({
-                isloggedin: true
+                isloggedin: true,
             })
         }).catch(err=>console.log(err));
     }
@@ -39,11 +41,20 @@ export default class Login extends Component {
     
     render() {
         let {email, password, isloggedin} = this.state;
+        // if(isloggedin || role === 'admin'){
+        //     return <Redirect to='/admindashboard' />
+        // }
         if(isloggedin){
             return <Redirect to='/dashboard' />
         }
+    
         return (
-            <div className='container'>
+            <div className="d-flex justify-content-center loginform">    
+            <Card className="bg-light mt-5"  style = {{width: "400px"}}>
+
+            <h3 className="text-center">LOGIN</h3>
+
+                <CardBody >
                 <Form>
                     <FormGroup>
                         <Label for="email">Email</Label>
@@ -57,8 +68,11 @@ export default class Login extends Component {
                         value={password} onChange= {this.handleChange}/>         
                     </FormGroup>
 
-                    <Button color='primary' block onClick= {this.handleLogin}>Sign In</Button>
+                    <Button className="btn btn-info" block onClick= {this.handleLogin}>Sign In</Button>
                 </Form>
+                </CardBody>  
+
+                </Card>
             </div>
         )
     }

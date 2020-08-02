@@ -7,9 +7,9 @@ export default function Home() {
         <div>
             <Jumbotron>
                 <h1 className="display-3">Online Book Reservation Web App</h1>
-                <p className="lead">This is a simple web app used for management of books and providing it for users.</p>
+                <p className="lead">This is a simple web app where various books are available for its reservation.</p>
                 <hr className="my-2" />
-                <p>Here you can reserve the book you want.</p>
+                <p>Here you can reserve the book you want after valid registration and log in.</p>
                 <p className="lead">New User?
                 <Link to= '/register'>Sign Up</Link>
                 </p>
