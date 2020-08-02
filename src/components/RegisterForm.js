@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, Label, Input, Button, Card, CardBody } from 'reactstrap';
+import { Form, FormGroup, Label, Input, Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap';
 
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import { faUserPlus } from '@fortawesome/free-solid-svg-icons';
 
 
 export default class RegisterForm extends Component {
@@ -42,23 +44,27 @@ export default class RegisterForm extends Component {
         }
         return (
 
-        <div className="d-flex justify-content-center signupform">    
+        <div className="d-flex justify-content-center">    
             <Card className="bg-light mt-5"  style = {{width: "400px"}}>
-
-            <h3 className="text-center">REGISTER</h3>
-                <CardBody>
-                    <Form>
+            <CardHeader className="bg-info text-white"><FontAwesomeIcon icon={faUserPlus}/>Register</CardHeader>
+            <Form>
+                <CardBody> 
+                <Row form> 
+                <Col md={6}>
                         <FormGroup>
                             <Label for="firstname">Firstname</Label>
                             <Input type='text' name="firstname" id="firstname" 
                             value={firstname} onChange = {this.handleChange}/>         
                         </FormGroup>
-
+                 </Col>       
+                 <Col md={6}> 
                         <FormGroup>
                             <Label for="lastname">Lastname</Label>
                             <Input type='text' name="lastname" id="lastname" 
                             value={lastname} onChange= {this.handleChange}/>         
                         </FormGroup>
+                </Col>  
+                </Row>        
                         <FormGroup>
                             <Label for="email">Email</Label>
                             <Input type='text' name="email" id="email" 
@@ -72,8 +78,8 @@ export default class RegisterForm extends Component {
                         </FormGroup>
 
                         <Button className="btn btn-info" block onClick= {this.handleRegister}>Sign Up</Button>
-                    </Form>
                 </CardBody>
+                </Form>
             </Card>
 
         </div>      

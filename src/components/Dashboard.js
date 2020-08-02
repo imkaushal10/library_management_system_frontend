@@ -1,8 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import axios from 'axios';
-import {Table, Card, CardBody, CardHeader, ButtonGroup, Button} from 'reactstrap';
+import {Table, Card, CardBody, CardHeader, ButtonGroup, Button, Navbar} from 'reactstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faList, faEdit, faTrash, faPlusCircle, faEye} from '@fortawesome/free-solid-svg-icons'
+import Navigationbar from './Navigationbar'
+
+
 
 export default class Dashboard extends Component {
     
@@ -19,7 +22,11 @@ export default class Dashboard extends Component {
     }
 
     componentDidMount(){
-       axios.get('http://localhost:3001/books', this.state.config) 
+       this.getbooks();
+    }
+
+    getbooks(){
+        axios.get('http://localhost:3001/books', this.state.config) 
        .then(res=>{
            console.log(res);
            this.setState({books: res.data});
@@ -29,17 +36,10 @@ export default class Dashboard extends Component {
 
     render() {  
         return (
-        
-            // <ListGroup>
-            //   {
-            //     this.state.books.map((book)=>{
-            //      return <ListGroupItem key= {book._id}>{book.title}</ListGroupItem>
-            //     })
-            //   } 
-            // </ListGroup>
-
-            <Card>
-                <CardHeader><FontAwesomeIcon icon={faList}/>Book Lists</CardHeader>
+      
+            <div className="container">
+            <Card className="mt-5 table-responsive ">
+                <CardHeader className="bg-info text-white"><FontAwesomeIcon icon={faList}/>Book Lists</CardHeader>
                 <CardBody>
                      <Table bordered hover striped>
                         <thead className="bg-info text-white">
@@ -48,7 +48,6 @@ export default class Dashboard extends Component {
                                 <th>Title</th>
                                 <th>Author</th>
                                 <th>Publisher</th>
-                                <th>Status</th>
                                 <th>Format</th>
                                 <th>Published Year</th>
                                 <th>Review</th>
@@ -56,7 +55,7 @@ export default class Dashboard extends Component {
                             </tr>    
                         </thead> 
 
-                        <tbody>
+                        <tbody className="responsive">
                         {
                             this.state.books.length === 0?
                             <tr align="center">
@@ -68,7 +67,6 @@ export default class Dashboard extends Component {
                                     <td>{book.title}</td>
                                     <td>{book.author}</td>
                                     <td>{book.publisher}</td>
-                                    <td>{book.status}</td>
                                     <td>{book.format}</td>
                                     <td>{book.published_year}</td>
                                     <td align="center">
@@ -92,7 +90,7 @@ export default class Dashboard extends Component {
                 </CardBody> 
             </Card>   
 
-            // </div>
+            </div>
 
         )
     }
