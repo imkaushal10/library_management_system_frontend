@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Nav, Navbar, NavbarBrand, NavLink} from 'reactstrap'
+import {Nav, Navbar} from 'reactstrap'
 import {Link} from 'react-router-dom'
 
 import booklogo from '../booklogo.png'

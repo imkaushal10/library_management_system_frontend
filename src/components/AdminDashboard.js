@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
+import {toast} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import { Form, FormGroup, Label, Input, Button, Card, CardHeader, CardBody, CardFooter, Col, Row} from 'reactstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faList, faEdit, faTrash, faPlusCircle, faEye, faPlus} from '@fortawesome/free-solid-svg-icons'
+import {faPlus} from '@fortawesome/free-solid-svg-icons'
 
 import axios from 'axios';
 // import { Redirect } from 'react-router-dom';
 
+toast.configure();
 
 export default class AdminDashboard extends Component {
     constructor(props) {
@@ -17,7 +20,7 @@ export default class AdminDashboard extends Component {
             publisher: '',
             format: '',
             published_year: '',
-            image: ''
+            image: null
 
             // isRegistered: false
         }
@@ -29,20 +32,43 @@ export default class AdminDashboard extends Component {
         })
     }
 
+    handleImageChange = (e)=>{
+        this.setState({
+            image: e.target.files[0]
+        })
+    }
+
     handleAddbook = (e)=>{
-        axios.post('http://localhost:3001/books ', this.state)
-        .then(res=>{
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('title', this.state.title);
+        formData.append('author', this.state.author);
+        formData.append('publisher', this.state.publisher);
+        formData.append('format', this.state.format);
+        formData.append('publlished_year', this.state.published_year);
+        formData.append('image', this.state.image, this.state.image.name);
+
+        axios.post('http://localhost:3001/books ', formData, 
+        {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        // .then(()=> this.props.onCreate())
+        .then((res)=>{
           console.log(res); 
+          toast('Book Added Successfully')
         //   this.setState({
         //       isRegistered: true
         //   })
         }).catch(err=> console.log(err));
-    }
+    };
     
     
     
     render() {
-        let {title, author, publisher, format, published_year, image} = this.state;
+        let {title, author, publisher, format, published_year} = this.state;
         // if(isRegistered){
         //     return <Redirect to='/'/>;
         // }
@@ -101,7 +127,7 @@ export default class AdminDashboard extends Component {
                     <FormGroup>
                         <Label for="image">Image</Label>
                         <Input type='file' name="image" id="image" 
-                        value={image} onChange= {this.handleChange}/>         
+                         onChange= {this.handleImageChange}/>         
                     </FormGroup>
                 </Col>
                 </Row>

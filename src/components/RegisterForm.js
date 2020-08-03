@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, Label, Input, Button, Card, CardBody, CardHeader, Col, Row } from 'reactstrap';
+import { Form, FormGroup, Label, Input, Button, Card, CardBody, CardHeader, CardFooter, Col, Row } from 'reactstrap';
 
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
@@ -45,8 +45,8 @@ export default class RegisterForm extends Component {
         return (
 
         <div className="d-flex justify-content-center">    
-            <Card className="bg-light mt-5"  style = {{width: "400px"}}>
-            <CardHeader className="bg-info text-white"><FontAwesomeIcon icon={faUserPlus}/>Register</CardHeader>
+            <Card className="bg-light mt-3"  style = {{width: "400px"}}>
+            <CardHeader className="bg-info text-white text-center"><FontAwesomeIcon icon={faUserPlus}/>REGISTER</CardHeader>
             <Form>
                 <CardBody> 
                 <Row form> 
@@ -77,9 +77,13 @@ export default class RegisterForm extends Component {
                             value={password} onChange= {this.handleChange}/>         
                         </FormGroup>
 
-                        <Button className="btn btn-info" block onClick= {this.handleRegister}>Sign Up</Button>
                 </CardBody>
                 </Form>
+                
+                <CardFooter>
+                   <Button className="btn btn-info" block onClick= {this.handleRegister}>Sign Up</Button>
+                </CardFooter>
+                
             </Card>
 
         </div>      

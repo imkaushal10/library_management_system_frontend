@@ -21,10 +21,10 @@ function App() {
               <Col lg={12} style={{marginTop:"20px"}}> 
                   <Route path= '/' exact component={Home}/>
                   <Route path= '/register' component={RegisterForm} />
-                  <Route path= '/dashboard' component={Dashboard} />
+                  {/* <Route path= '/dashboard' component={Dashboard} /> */}
                   <Route path='/login' component={Login}/>
                   <PrivateRoute path='/admindashboard' component={AdminDashboard}/>
-                  {/* <PrivateRoute path='/dashboard' component={Dashboard}/> */}
+                  <PrivateRoute path='/dashboard' component={Dashboard}/>
               </Col>
             </Row>  
         </Container>
