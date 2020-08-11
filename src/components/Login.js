@@ -49,6 +49,7 @@ export default class Login extends Component {
         // if(isloggedin || role === 'admin'){
         //     return <Redirect to='/admindashboard' />
         // }
+       
         if (isloggedin && !(email === "admin123@gmail.com")){
             return <Redirect to='/dashboard' />
         }

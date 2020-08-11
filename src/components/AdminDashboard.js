@@ -3,9 +3,10 @@ import {toast} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Form, FormGroup, Label, Input, Button, Card, CardHeader, CardBody, CardFooter, Col, Row} from 'reactstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faPlus} from '@fortawesome/free-solid-svg-icons'
-
+import {faPlus, faList, faBackward, faEdit, faSave} from '@fortawesome/free-solid-svg-icons'
+import Navigation from './Navigation'
 import axios from 'axios';
+
 // import { Redirect } from 'react-router-dom';
 
 toast.configure();
@@ -15,28 +16,41 @@ export default class AdminDashboard extends Component {
         super(props)
     
         this.state = {
+            bookid: '',
             title: '',
             author: '',
             publisher: '',
             format: '',
-            published_year: '',
-            image: null
+            published_year: Number,
+            image: ''
 
             // isRegistered: false
         }
     }
 
+    initialState = {
+        bookid:'', title: '', author: '', publisher: '',  format: '', published_year: Number, image: ''
+    }
+
+    componentDidMount(){
+        const bookId = this.props.match.params.id
+        if(bookId){
+         this.findbyIdandUpdateBook(bookId);
+        }
+    };
+ 
+
     handleChange = (e)=>{
         this.setState({
         [e.target.name]: e.target.value    
         })
-    }
+    };
 
     handleImageChange = (e)=>{
         this.setState({
             image: e.target.files[0]
         })
-    }
+    };
 
     handleAddbook = (e)=>{
         e.preventDefault();
@@ -64,19 +78,77 @@ export default class AdminDashboard extends Component {
         //   })
         }).catch(err=> console.log(err));
     };
+
+    updateBook = ()=>{
+        const formData = new FormData();
+        formData.append('title', this.state.title);
+        formData.append('author', this.state.author);
+        formData.append('publisher', this.state.publisher);
+        formData.append('format', this.state.format);
+        formData.append('publlished_year', this.state.published_year);
+        formData.append('image', this.state.image, this.state.image.name);
+
+        axios.post(`http://localhost:3001/books`, formData, 
+        {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        // .then(()=> this.props.onCreate())
+        .then((res)=>{
+          console.log(res); 
+        //   <Redirect to = '/dashboard'/>
+          toast('Book Updated Successfully')
+        //   this.setState({
+        //       isRegistered: true
+        //   })
+        }).catch(err=> console.log(err));
+    };
     
+    
+
+    findbyIdandUpdateBook= (bookId) =>{
+        // alert(bookId)
+        axios.get('http://localhost:3001/books/'+bookId, this.state.config) 
+        .then(res=>{
+            // alert(res.data._id)
+            if(res.data != null){
+                this.setState({
+                   bookid: res.data._id,
+                   title: res.data.title,
+                   author: res.data.author,
+                   publisher: res.data.publisher,
+                   format: res.data.format,
+                   published_year: res.data.published_year,
+                   image: res.data.image.file               
+                })
+            }
+            
+        }).catch(err=> console.log(err));
+    };
+
+    handleViewbook = ()=>{
+        return this.props.history.push("/books")
+    };
+
+    handleReset = ()=>{
+        this.setState(()=> this.initialState);
+    };
     
     
     render() {
-        let {title, author, publisher, format, published_year} = this.state;
+        let {bookid, title, author, publisher, format, published_year} = this.state;
         // if(isRegistered){
         //     return <Redirect to='/'/>;
         // }
         return (
+        <div>
+            <Navigation/>    
         <div className="container">
             <Card className="bg-light mt-5" > 
             <CardHeader className="bg-info text-white"><FontAwesomeIcon icon={faPlus}/>Add New Book</CardHeader>
-            <Form>
+            <Form onReset={this.handleReset}>
                <CardBody>  
                 <Row form> 
                 <Col md={6}>
@@ -107,9 +179,16 @@ export default class AdminDashboard extends Component {
 
                 <Col md={6}> 
                 <FormGroup>
-                        <Label for="format">Format</Label>         
+                <Label for="format">Format</Label>
+                    <select class="form-control" name="format" id="selectformat"
+                    value={format} onChange= {this.handleChange}>
+                        <option>Hardcover</option>
+                        <option>Journal</option>
+                        <option>Article</option>
+                    </select>
+                        {/* <Label for="format">Format</Label>         
                         <Input type='text' name="format" id="format" placeholder="Enter Book Format"
-                        value={format} onChange= {this.handleChange}/>         
+                        value={format} onChange= {this.handleChange}/>          */}
                     </FormGroup>
                 </Col>
                 </Row>
@@ -127,7 +206,7 @@ export default class AdminDashboard extends Component {
                     <FormGroup>
                         <Label for="image">Image</Label>
                         <Input type='file' name="image" id="image" 
-                         onChange= {this.handleImageChange}/>         
+                        onChange= {this.handleImageChange}/>         
                     </FormGroup>
                 </Col>
                 </Row>
@@ -135,10 +214,17 @@ export default class AdminDashboard extends Component {
             </Form>
 
             <CardFooter style={{textAlign:"right"}}>
-               <Button color='info' onClick= {this.handleAddbook}>ADD</Button>
+
+               <Button type="submit" size="sm" color='info' onClick={bookid? this.updateBook: this.handleAddbook}>
+                   <FontAwesomeIcon icon={bookid ? faEdit: faSave}/>{bookid ? "UPDATE":"SAVE"}</Button>{' '}
+               <Button type="reset" size="sm" color='info' onClick= {this.handleReset.bind()}>
+                   <FontAwesomeIcon icon={faBackward}/>RESET</Button>{' '}
+               <Button size="sm" color='info' onClick= {this.handleViewbook.bind()}>
+                   <FontAwesomeIcon icon={faList}/>View Books</Button>
             </CardFooter>
             </Card>  
               
+        </div>
         </div>
         )
     }
