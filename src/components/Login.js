@@ -16,10 +16,52 @@ export default class Login extends Component {
         this.state = {
             email: '',
             password: '',
+            errors: {},
             // role: '',
             isloggedin: false
         }
     }
+
+    handleValidation(){
+        let {email, password} = this.state;
+        let errors = {};
+        let formIsValid = true;
+
+        //Email
+        if(!email){
+           formIsValid = false;
+           errors["email"] = "Required";
+        }
+
+        // if(email !== this.state.email){
+        //    formIsValid = false;
+        //    errors["email"] = "Email doesnot exist";
+        // }
+
+        if(typeof email !== "undefined"){
+           let lastAtPos = email.lastIndexOf('@');
+           let lastDotPos = email.lastIndexOf('.');
+
+           if (!(lastAtPos < lastDotPos && lastAtPos > 0 && email.indexOf('@@') === -1 && lastDotPos > 2 && (email.length - lastDotPos) > 2)) {
+              formIsValid = false;
+              errors["email"] = "Email is not valid";
+            }
+       }  
+
+       //password
+       if(!password){
+            formIsValid = false;
+            errors["password"] = "Required";
+        }
+
+        // if(password !== this.state.password){
+        //     formIsValid = false;
+        //     errors["email"] = "Password doesnot matched";
+        //  }
+
+       this.setState({errors: errors});
+       return formIsValid;
+   }
 
     handleChange = (e)=>{
         this.setState({
@@ -29,18 +71,20 @@ export default class Login extends Component {
 
     handleLogin = (e)=>{
         e.preventDefault();
-        axios.post('http://localhost:3001/users/login', { 
-        email: this.state.email,
-        password: this.state.password,
-        // role: this.state.role
-        }).then((res)=>{
-            console.log(res);
-            localStorage.setItem('token', res.data.token);
-            this.setState({
-                isloggedin: true,
-            })
-            toast('Welcome' + this.state.email)
-        }).catch(err=>console.log(err));
+        if(this.handleValidation()){
+            axios.post('http://localhost:3001/users/login', { 
+            email: this.state.email,
+            password: this.state.password,
+            // role: this.state.role
+            }).then((res)=>{
+                console.log(res);
+                localStorage.setItem('token', res.data.token);
+                this.setState({
+                    isloggedin: true,
+                })
+                toast('Welcome' + this.state.email)
+            }).catch(err=>console.log(err));
+        }
     }
     
     
@@ -69,13 +113,15 @@ export default class Login extends Component {
                     <FormGroup>
                         <Label for="email">Email</Label>
                         <Input type='text' name="email" id="email" 
-                        value={email} onChange= {this.handleChange}/>         
+                        value={email} onChange= {this.handleChange}/>   
+                        <span style={{color: "red"}}>{this.state.errors["email"]}</span>      
                     </FormGroup>
 
                     <FormGroup>
                         <Label for="password">Password</Label>
                         <Input type='password' name="password" id="password" 
-                        value={password} onChange= {this.handleChange}/>         
+                        value={password} onChange= {this.handleChange}/>  
+                        <span style={{color: "red"}}>{this.state.errors["password"]}</span>       
                     </FormGroup>
 
                 </Form>
