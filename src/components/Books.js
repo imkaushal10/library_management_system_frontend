@@ -21,8 +21,10 @@ export default class Dashboard extends Component {
         this.state = {
             books: [],
             reviews:[],
+            bookings: [],
             reviewModal: false,
             reviewsViewModal: false,
+            BookreservesViewModal: false,
             // Authorization: localStorage.getItem('token') 
             config: {
                 headers: {'authorization': localStorage.getItem('token')}
@@ -148,11 +150,30 @@ export default class Dashboard extends Component {
     }
 
 
+    ViewReserves= (bookId) =>{
+        axios.get(`http://localhost:3001/books/${bookId}/bookings`, this.state.config) 
+        .then(res=>{
+            console.log(res);
+            this.setState({bookings: res.data})
+        }).catch(err=> console.log(err));
+
+        this.setState({
+            BookreservesViewModal: true
+        })
+
+    }
+
+
 
     handleCloseModal = ()=>{
         this.setState({
             reviewModal: false
         })
+
+        this.setState({
+           BookreservesViewModal: false 
+        })
+
         this.setState({
             reviewsViewModal: false
         })
@@ -231,6 +252,42 @@ export default class Dashboard extends Component {
 
         {/* viewreviewsmodal */}
 
+
+         {/* viewbookreservesmodal */}
+
+         <Modal isOpen={this.state.BookreservesViewModal} toggle={this.ViewReserves.bind(this)}>
+                <ModalHeader toggle={this.handleCloseModal.bind(this)}>Book Reserves</ModalHeader>
+                <ModalBody>
+                
+                <Table bordered hover striped>
+                            <thead className="bg-info text-white text-center">
+                                <tr>
+                                    <th>Booked By</th>
+                                </tr>    
+                            </thead> 
+                            <tbody className="responsive text-center">
+                            {
+                                // this.state.reviews.length === 0?
+                                // <tr align="center">
+                                //     <td colSpan="9">Reviews Available.</td>
+                                // </tr>:
+                                this.state.bookings.map((bookings)=>(
+                                    <tr key = {bookings._id}>
+                            
+                                        <td>{bookings.booked_by}</td>
+                                    </tr>    
+                                ))
+                            }                            
+                            </tbody>  
+                    </Table> 
+
+                </ModalBody>
+
+            </Modal> 
+         
+
+        {/* viewbookreservesmodal */}
+
 {/* 
             <div style={{"display": this.state.show? "block": "none"}}>
                 <MyToast children={{show:this.state.show, message: "Book Deleted Successfully"}}/>
@@ -247,7 +304,8 @@ export default class Dashboard extends Component {
                                 <th>Publisher</th>
                                 <th>Format</th>
                                 <th>Published Year</th>
-                                <th>Review</th>
+                                <th>Reviews</th>
+                                <th>Reserves</th>
                                 <th>Actions</th>
                             </tr>    
                         </thead> 
@@ -270,10 +328,16 @@ export default class Dashboard extends Component {
                                     <td>{book.format}</td>
                                     <td>{book.published_year}</td>
                                     <td align="center">
-                                        <ButtonGroup>
+            
                                             {/* <Button onClick={this.toggleReviewModal.bind(this)} size="sm" color="outline-primary"><FontAwesomeIcon icon={faPlusCircle}/></Button> */}
                                             <Button onClick={this.toggleReviews.bind(this, book._id)} size="sm" color="outline-primary"><FontAwesomeIcon icon={faEye}/></Button>
-                                        </ButtonGroup>
+                                        
+                                    </td>
+                                    <td align="center">
+            
+                                            {/* <Button onClick={this.toggleReviewModal.bind(this)} size="sm" color="outline-primary"><FontAwesomeIcon icon={faPlusCircle}/></Button> */}
+                                            <Button onClick={this.ViewReserves.bind(this, book._id)} size="sm" color="outline-primary"><FontAwesomeIcon icon={faEye}/></Button>
+                                        
                                     </td>
                                     <td>
                                         <ButtonGroup>

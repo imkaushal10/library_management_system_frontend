@@ -19,15 +19,18 @@ export default class Dashboard extends Component {
         super(props)
     
         this.state = {
+            bookid: '',
             books: [],
             reviews:[],
             reviewModal: false,
             reviewsViewModal: false,
             description:'',
+            IsBooked: false,
             show: false,
             // Authorization: 'Bearer' + localStorage.getItem('token')
+
             config: {
-                headers: {'authorization': `Bearer`+ localStorage.getItem('token')}
+                headers: {'authorization': `Bearer ${localStorage.getItem('token')}`}
             }
         }
     }
@@ -74,16 +77,24 @@ export default class Dashboard extends Component {
 
     // booking
     ReserveBook=(bookId)=>{
+        let IsBooked = this.state;
         // toast('Book reserved Successfully');
         const params = new URLSearchParams();
         params.append('booked_by', params._id);
-    
-        axios.post(`http://localhost:3001/books/${bookId}/bookings`, params._id, this.state.config) 
-        .then(res=>{
-            console.log(res);
-            toast('Booked Successfully')
-            // alert(res);
-        }).catch(err=> console.log(err));
+        if(IsBooked){
+            axios.post(`http://localhost:3001/books/${bookId}/bookings`, params._id, this.state.config) 
+              .then(res=>{
+                console.log(res);
+                toast('Booked Successfully')
+                this.setState({
+                    IsBooked: true
+                })
+            // alert(res);  
+            }).catch(err=> console.log(err));
+        }else{
+            toast('Already Booked')
+        } 
+        
     }
 
     // booking
@@ -93,25 +104,27 @@ export default class Dashboard extends Component {
     // addingreviewmodal
     
     AddReview = (bookId) =>{
-        // const bookId = this.props.match.params.id; 
+        // const bookId = this.props.match.params._id; 
         const params = new URLSearchParams();
-        params.append(params._id, bookId);
-        alert(bookId);
-        // params.append('review_id', review._id);
-    //     axios.post(`http://localhost:3001/books/${bookId}/reviews`, this.state.description, this.state.config) 
-    //    .then(res=>{
-    //        console.log(res);
-    //        toast('Your Review Added Successfully');
-    //     //    if(res.data != null){
-    //     //         this.setState({"show": true})
-    //     //         setTimeout(() => this.setState({"show": false}), 3000);
-    //     //         // this.setState({
-    //     //         //     books: this.state.books.filter(book => book._id !== bookid)
-    //     //         // })
-    //     //     }else{
-    //     //     this.setState({"show": false});
-    //     // }  
-    //    }).catch(err=> console.log(err));
+        params.append('user', params._id);
+        params.append('description', this.state.description);
+
+        // alert(params._id);
+        
+        axios.post(`http://localhost:3001/books/${bookId}/reviews`, params , this.state.config) 
+       .then(res=>{
+           console.log(res);
+           toast('Review Added Successfully');
+        //    if(res.data != null){
+        //         this.setState({"show": true})
+        //         setTimeout(() => this.setState({"show": false}), 3000);
+        //         // this.setState({
+        //         //     books: this.state.books.filter(book => book._id !== bookid)
+        //         // })
+        //     }else{
+        //     this.setState({"show": false});
+        // }  
+       }).catch(err=> console.log(err));
     }
  
     handleChange = (e)=>{
@@ -223,7 +236,7 @@ export default class Dashboard extends Component {
                                 <tr align="center">
                                     <td colSpan="9">Reviews Not Available.</td>
                                 </tr>:
-                                this.state.books.map((book)=>(
+                                this.state.books.map(book=>(
                                     <tr key = {book._id}>
                                         <td>{book.reviews}</td>
                                         {/* <td>{review.description}</td> */}

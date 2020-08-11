@@ -3,7 +3,7 @@ import {toast} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Form, FormGroup, Label, Input, Button, Card, CardHeader, CardBody, CardFooter, Col, Row} from 'reactstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faPlus, faList, faBackward, faEdit, faSave} from '@fortawesome/free-solid-svg-icons'
+import {faList, faBackward, faEdit, faSave, faPlusSquare} from '@fortawesome/free-solid-svg-icons'
 import Navigation from './Navigation'
 import axios from 'axios';
 
@@ -60,7 +60,7 @@ export default class AdminDashboard extends Component {
         formData.append('publisher', this.state.publisher);
         formData.append('format', this.state.format);
         formData.append('publlished_year', this.state.published_year);
-        formData.append('image', this.state.image, this.state.image.name);
+        formData.append('image', this.state.image);
 
         axios.post('http://localhost:3001/books ', formData, 
         {
@@ -80,15 +80,17 @@ export default class AdminDashboard extends Component {
     };
 
     updateBook = ()=>{
+        // const bookId
         const formData = new FormData();
+        formData.append('bookid', this.state.bookid);
         formData.append('title', this.state.title);
         formData.append('author', this.state.author);
         formData.append('publisher', this.state.publisher);
         formData.append('format', this.state.format);
         formData.append('publlished_year', this.state.published_year);
-        formData.append('image', this.state.image, this.state.image.name);
+        formData.append('image', this.state.image);
 
-        axios.post(`http://localhost:3001/books`, formData, 
+        axios.put(`http://localhost:3001/books/`+this.state.bookid, formData, 
         {
             headers: {
                 Accept: 'application/json',
@@ -108,9 +110,9 @@ export default class AdminDashboard extends Component {
     
     
 
-    findbyIdandUpdateBook= (bookId) =>{
+    findbyIdandUpdateBook= (bookid) =>{
         // alert(bookId)
-        axios.get('http://localhost:3001/books/'+bookId, this.state.config) 
+        axios.get('http://localhost:3001/books/'+bookid, this.state.config) 
         .then(res=>{
             // alert(res.data._id)
             if(res.data != null){
@@ -121,7 +123,7 @@ export default class AdminDashboard extends Component {
                    publisher: res.data.publisher,
                    format: res.data.format,
                    published_year: res.data.published_year,
-                   image: res.data.image.file               
+                   image: res.image              
                 })
             }
             
@@ -147,7 +149,8 @@ export default class AdminDashboard extends Component {
             <Navigation/>    
         <div className="container">
             <Card className="bg-light mt-5" > 
-            <CardHeader className="bg-info text-white"><FontAwesomeIcon icon={faPlus}/>Add New Book</CardHeader>
+            <CardHeader className="bg-info text-white">
+                <FontAwesomeIcon icon={this.state.bookid? faEdit: faPlusSquare}/>{this.state.bookid? "Update Book": "Add New Book"}</CardHeader>
             <Form onReset={this.handleReset}>
                <CardBody>  
                 <Row form> 
@@ -180,11 +183,11 @@ export default class AdminDashboard extends Component {
                 <Col md={6}> 
                 <FormGroup>
                 <Label for="format">Format</Label>
-                    <select class="form-control" name="format" id="selectformat"
+                    <select className="form-control" name="format" id="selectformat"
                     value={format} onChange= {this.handleChange}>
                         <option>Hardcover</option>
                         <option>Journal</option>
-                        <option>Article</option>
+                        <option>Magazine</option>
                     </select>
                         {/* <Label for="format">Format</Label>         
                         <Input type='text' name="format" id="format" placeholder="Enter Book Format"
@@ -215,7 +218,7 @@ export default class AdminDashboard extends Component {
 
             <CardFooter style={{textAlign:"right"}}>
 
-               <Button type="submit" size="sm" color='info' onClick={bookid? this.updateBook: this.handleAddbook}>
+               <Button type="submit" size="sm" color='info' onClick={bookid? this.updateBook : this.handleAddbook}>
                    <FontAwesomeIcon icon={bookid ? faEdit: faSave}/>{bookid ? "UPDATE":"SAVE"}</Button>{' '}
                <Button type="reset" size="sm" color='info' onClick= {this.handleReset.bind()}>
                    <FontAwesomeIcon icon={faBackward}/>RESET</Button>{' '}

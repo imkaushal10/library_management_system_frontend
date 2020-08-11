@@ -42,6 +42,7 @@ export default class Navigationbar extends Component {
                     <Link to={"books"} className="nav-link text-muted mr-auto">Books</Link>
                     <Link to={"admindashboard"} className="nav-link text-muted">Add Book</Link>
                     <Link to={"users"} className="nav-link text-muted">Users</Link>
+                    <Link to={"bookings"} className="nav-link text-muted">Bookings</Link>
                     
                     </Nav>
                     <Button className="" color="info" onClick={this.handleLogout}>
