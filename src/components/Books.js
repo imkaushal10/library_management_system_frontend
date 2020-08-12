@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import {Table, Card, CardBody, CardHeader, ButtonGroup, Button
     , Modal, ModalBody, ModalHeader} from 'reactstrap';   
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faList, faEdit, faTrash,faEye} from '@fortawesome/free-solid-svg-icons'
+import {faList, faEdit, faTrash,faEye, faCheckCircle, faWindowClose} from '@fortawesome/free-solid-svg-icons'
 import {Link} from 'react-router-dom'
 import Navigation from './Navigation'
 
@@ -263,6 +263,8 @@ export default class Dashboard extends Component {
                             <thead className="bg-info text-white text-center">
                                 <tr>
                                     <th>Booked By</th>
+                                    <th>Booked On</th>
+                                    <th>Action</th>
                                 </tr>    
                             </thead> 
                             <tbody className="responsive text-center">
@@ -271,10 +273,21 @@ export default class Dashboard extends Component {
                                 // <tr align="center">
                                 //     <td colSpan="9">Reviews Available.</td>
                                 // </tr>:
-                                this.state.bookings.map((bookings)=>(
-                                    <tr key = {bookings._id}>
+                                this.state.bookings.map((booking)=>(
+                                    <tr key = {booking._id}>
                             
-                                        <td>{bookings.booked_by}</td>
+                                        <td>{booking.booked_by.email}</td>
+                                        <td>{booking.booking_date}</td>
+
+                                        {/* onClick={this.ViewReserves.bind(this, book._id)}  */}
+                                        <td align="center">
+                                           <ButtonGroup> 
+                                            <Button size="sm" color="outline-success">                     
+                                            <FontAwesomeIcon icon={faCheckCircle}/></Button>
+                                            <Button size="sm" color="outline-danger">
+                                            <FontAwesomeIcon icon={faWindowClose}/></Button>
+                                           </ButtonGroup> 
+                                        </td>
                                     </tr>    
                                 ))
                             }                            
