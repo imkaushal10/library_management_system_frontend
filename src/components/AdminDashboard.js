@@ -21,7 +21,7 @@ export default class AdminDashboard extends Component {
             author: '',
             publisher: '',
             format: '',
-            published_year: Number,
+            published_year: '',
             image: ''
 
             // isRegistered: false
@@ -29,7 +29,7 @@ export default class AdminDashboard extends Component {
     }
 
     initialState = {
-        bookid:'', title: '', author: '', publisher: '',  format: '', published_year: Number, image: ''
+        bookid:'', title: '', author: '', publisher: '',  format: '', published_year: '', image: ''
     }
 
     componentDidMount(){
@@ -42,9 +42,20 @@ export default class AdminDashboard extends Component {
 
     handleChange = (e)=>{
         this.setState({
-        [e.target.name]: e.target.value    
-        })
+            [e.target.name]: e.target.name === 'published_year' ? parseInt(e.target.value) : e.target.value
+            // [e.target.name]: e.target.value
+        });  
+
     };
+
+    // handlePublishedYear = (e)=>{
+    //     this.setState({
+    //     [e.target.name]: parseInt(e.target.value)
+    //     // [e.target.name]: e.target.valueAsNumber || e.target.value  
+    // });  
+
+    // };
+
 
     handleImageChange = (e)=>{
         this.setState({
@@ -59,7 +70,7 @@ export default class AdminDashboard extends Component {
         formData.append('author', this.state.author);
         formData.append('publisher', this.state.publisher);
         formData.append('format', this.state.format);
-        formData.append('publlished_year', this.state.published_year);
+        formData.append('published_year', this.state.published_year);
         formData.append('image', this.state.image);
 
         axios.post('http://localhost:3001/books ', formData, 
@@ -87,7 +98,7 @@ export default class AdminDashboard extends Component {
         formData.append('author', this.state.author);
         formData.append('publisher', this.state.publisher);
         formData.append('format', this.state.format);
-        formData.append('publlished_year', this.state.published_year);
+        formData.append('published_year', this.state.published_year);
         formData.append('image', this.state.image);
 
         axios.put(`http://localhost:3001/books/`+this.state.bookid, formData, 
@@ -123,7 +134,7 @@ export default class AdminDashboard extends Component {
                    publisher: res.data.publisher,
                    format: res.data.format,
                    published_year: res.data.published_year,
-                   image: res.image              
+                   image: res.data.image              
                 })
             }
             
@@ -140,7 +151,7 @@ export default class AdminDashboard extends Component {
     
     
     render() {
-        let {bookid, title, author, publisher, format, published_year} = this.state;
+        let {bookid, title, author, publisher, format, published_year, Hardcover, Journal, Magazine} = this.state;
         // if(isRegistered){
         //     return <Redirect to='/'/>;
         // }
@@ -174,9 +185,10 @@ export default class AdminDashboard extends Component {
                 <Row form>
                 <Col md={6}>
                 <FormGroup>
-                        <Label for="published_year">Year of Publication</Label>
-                        <Input type='number' name="published_year" id="published_year" placeholder="Enter Published Year" 
-                        value={published_year} onChange= {this.handleChange}/>         
+                        <Label for="published_year">Year of publication</Label>
+                        <Input type='number' name="published_year" id="published_year" placeholder="Enter Book Published Year" 
+                        value={published_year} onChange= {this.handleChange}/>     
+                
                     </FormGroup>
                 </Col> 
 
@@ -185,13 +197,11 @@ export default class AdminDashboard extends Component {
                 <Label for="format">Format</Label>
                     <select className="form-control" name="format" id="selectformat"
                     value={format} onChange= {this.handleChange}>
-                        <option>Hardcover</option>
-                        <option>Journal</option>
-                        <option>Magazine</option>
+                        <option value="Hardcover">Hardcover</option>
+                        <option value="Journal">Journal</option>
+                        <option value="Magazine">Magazine</option>
                     </select>
-                        {/* <Label for="format">Format</Label>         
-                        <Input type='text' name="format" id="format" placeholder="Enter Book Format"
-                        value={format} onChange= {this.handleChange}/>          */}
+                      
                     </FormGroup>
                 </Col>
                 </Row>
