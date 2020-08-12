@@ -80,7 +80,7 @@ export default class Dashboard extends Component {
                 <MyToast children={{show:this.state.show, message: "Book Deleted Successfully"}}/>
             </div>    */}
             <Card className="mt-5 table-responsive ">
-                <CardHeader className="bg-info text-white"><FontAwesomeIcon icon={faList}/>Book Lists</CardHeader>
+                <CardHeader className="bg-info text-white"><FontAwesomeIcon icon={faList}/>Users Lists</CardHeader>
                 <CardBody>
                      <Table bordered hover striped>
                         <thead className="bg-info text-white text-center">
