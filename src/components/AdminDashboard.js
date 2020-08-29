@@ -3,7 +3,7 @@ import {toast} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Form, FormGroup, Label, Input, Button, Card, CardHeader, CardBody, CardFooter, Col, Row} from 'reactstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faList, faBackward, faEdit, faSave, faPlusSquare} from '@fortawesome/free-solid-svg-icons'
+import {faList,faEdit, faSave, faPlusSquare, faRecycle} from '@fortawesome/free-solid-svg-icons'
 import Navigation from './Navigation'
 import axios from 'axios';
 
@@ -12,6 +12,7 @@ import axios from 'axios';
 toast.configure();
 
 export default class AdminDashboard extends Component {
+    
     constructor(props) {
         super(props)
     
@@ -20,7 +21,7 @@ export default class AdminDashboard extends Component {
             title: '',
             author: '',
             publisher: '',
-            format: '',
+            format: 'Hardcover',
             published_year: '',
             image: ''
 
@@ -28,16 +29,20 @@ export default class AdminDashboard extends Component {
         }
     }
 
+    
     initialState = {
-        bookid:'', title: '', author: '', publisher: '',  format: '', published_year: '', image: ''
+        bookid:'', title: '', author: '', publisher: '',  format: '', published_year: '', files: ''
     }
 
     componentDidMount(){
-        const bookId = this.props.match.params.id
+        const bookId = this.props.match.params.id;
         if(bookId){
          this.findbyIdandUpdateBook(bookId);
         }
+
     };
+
+    
  
 
     handleChange = (e)=>{
@@ -64,6 +69,7 @@ export default class AdminDashboard extends Component {
     };
 
     handleAddbook = (e)=>{
+        // alert(`${this.state.format}`)
         e.preventDefault();
         const formData = new FormData();
         formData.append('title', this.state.title);
@@ -151,7 +157,7 @@ export default class AdminDashboard extends Component {
     
     
     render() {
-        let {bookid, title, author, publisher, format, published_year, Hardcover, Journal, Magazine} = this.state;
+        let {bookid, title, author, publisher, format, published_year} = this.state;
         // if(isRegistered){
         //     return <Redirect to='/'/>;
         // }
@@ -195,7 +201,7 @@ export default class AdminDashboard extends Component {
                 <Col md={6}> 
                 <FormGroup>
                 <Label for="format">Format</Label>
-                    <select className="form-control" name="format" id="selectformat"
+                    <select className="form-control" name="format" id="format"
                     value={format} onChange= {this.handleChange}>
                         <option value="Hardcover">Hardcover</option>
                         <option value="Journal">Journal</option>
@@ -231,7 +237,7 @@ export default class AdminDashboard extends Component {
                <Button type="submit" size="sm" color='info' onClick={bookid? this.updateBook : this.handleAddbook}>
                    <FontAwesomeIcon icon={bookid ? faEdit: faSave}/>{bookid ? "UPDATE":"SAVE"}</Button>{' '}
                <Button type="reset" size="sm" color='info' onClick= {this.handleReset.bind()}>
-                   <FontAwesomeIcon icon={faBackward}/>RESET</Button>{' '}
+                   <FontAwesomeIcon icon={faRecycle}/>RESET</Button>{' '}
                <Button size="sm" color='info' onClick= {this.handleViewbook.bind()}>
                    <FontAwesomeIcon icon={faList}/>View Books</Button>
             </CardFooter>
