@@ -4,11 +4,12 @@ import axios from 'axios';
 import {toast} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import {Table, Card, CardBody, CardHeader, ButtonGroup, Button, Form, FormGroup, Label, 
-    Input, Modal, ModalFooter, ModalBody, ModalHeader} from 'reactstrap';   
+    InputGroup, Input, Modal, ModalFooter, ModalBody, ModalHeader} from 'reactstrap';   
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faList, faPlusCircle, faEye, faBook, faSearch} from '@fortawesome/free-solid-svg-icons'
 // import {Link} from 'react-router-dom'
 import Navigationbar from './Navigationbar'
+
 
 
 
@@ -23,11 +24,13 @@ export default class Dashboard extends Component {
             books: [],
             reviews:[],
             search: '',
+            bookings: [],
             reviewModal: false,
             reviewsViewModal: false,
             description:'',
             IsBooked: false,
             selectedValue:'',
+            reviewid:'',
             show: false,
             // Authorization: 'Bearer' + localStorage.getItem('token')
 
@@ -38,9 +41,10 @@ export default class Dashboard extends Component {
     }
 
     componentDidMount(){
-    
+    //    alert(this.state.books);
+    //    this.viewReserves();
        this.getbooks();
-       let bookId = this.props.match.params.id 
+    //    let bookId = this.props.match.params.id 
     //    if(bookId){
     //     this.AddReview(bookId);
     //    }
@@ -59,13 +63,25 @@ export default class Dashboard extends Component {
 
 
     ///searching
-    // handlesearch=(e)=>{
-    //    this.setState({
-    //     [e.target.name]: e.target.value 
-    //    })
-    // }
+    handlesearch=(e)=>{
+       this.setState({
+        [e.target.name]: e.target.value 
+       })
+    }
     ///searching
 
+
+   //getreserves
+//    viewReserves(){
+//         let bookId = this.state.selectedValue;   
+//         // alert(bookId) 
+//         axios.get(`http://localhost:3001/books/${bookId}/bookings`, this.state.config) 
+//         .then(res=>{
+//             console.log(res);
+//             this.setState({bookings: res.data})
+//         }).catch(err=> console.log(err));
+//    }
+   //getreserves
 
 
     // booking
@@ -74,22 +90,27 @@ export default class Dashboard extends Component {
         // toast('Book reserved Successfully');
         const params = new URLSearchParams();
         params.append('booked_by', params._id);
-        if(IsBooked){
-            axios.post(`http://localhost:3001/books/${bookId}/bookings`, params._id, this.state.config) 
-              .then(res=>{
-                console.log(res);
-                this.setState({
-                    IsBooked: true,
-                
-                })
-                toast('Booked Successfully')
-                
-            // alert(res);  
-            }).catch(err=> console.log(err));
-        }else{
-            toast('Already Booked')
-        } 
-        
+        // alert(params._id);
+            if(this.state.IsBooked){
+                axios.post(`http://localhost:3001/books/${bookId}/bookings`, params._id, this.state.config) 
+                .then(res=>{
+                    console.log(res);
+                    // if(res.data[0].booked_by[0].email){
+                    //     toast("You have already reserved this book");
+                    // }else{
+                    //     toast('Book Reserved Successfully');
+                    // }
+                    // alert(res.data[8].booked_by[0].email);
+                    this.setState({
+                        IsBooked: true
+                    })
+                    toast('Book Reserved Successfully');
+                  
+                }).catch(err=> console.log(err))
+            }else{
+                toast('You have already reserved')
+            }
+            
     }
 
     // booking
@@ -103,21 +124,12 @@ export default class Dashboard extends Component {
         params.append('user', params.id);
         params.append('description', this.state.description);
 
-        alert(bookId);
+        // alert(bookId);
         
         axios.post(`http://localhost:3001/books/${bookId}/reviews`, params, this.state.config) 
        .then(res=>{
            console.log(res);
-           toast('Review Added Successfully');
-        //    if(res.data != null){
-        //         this.setState({"show": true})
-        //         setTimeout(() => this.setState({"show": false}), 3000);
-        //         // this.setState({
-        //         //     books: this.state.books.filter(book => book._id !== bookid)
-        //         // })
-        //     }else{
-        //     this.setState({"show": false});
-        // }  
+            toast("Review Added Successfully");
        }).catch(err=> console.log(err));
     }
  
@@ -148,14 +160,28 @@ export default class Dashboard extends Component {
     
      
     
-   //getreviews
-    toggleReviews(bookId){
-        // const params = new URLSearchParams();
-        // params.append(reviewId, params._id);
-        // alert(bookId + '' +reviewId);
-        axios.get(`http://localhost:3001/books/${bookId}/reviews`, this.state.config) 
+//    getreviews
+    // toggleReviews(bookId){
+    //     // const params = new URLSearchParams();
+    //     // params.append(reviewId, params._id);
+    //     // alert(bookId + '' +reviewId);
+    //     // let reviewId = this.state.reviewid;
+    //     alert(reviewId);
+    //     axios.get(`http://localhost:3001/books/${bookId}/reviews`, this.state.config) 
+    //     .then(res=>{
+    //         // console(params._id)
+    //         console.log(res);
+    //         this.setState({reviews: res.data})
+    //     }).catch(err=> console.log(err));
+
+    //     this.setState({
+    //         reviewsViewModal: true
+    //     })
+    // }
+
+    toggleReviews(){
+        axios.get(`http://localhost:3001/reviews`, this.state.config) 
         .then(res=>{
-            // console(params._id)
             console.log(res);
             this.setState({reviews: res.data})
         }).catch(err=> console.log(err));
@@ -166,23 +192,31 @@ export default class Dashboard extends Component {
     }
 
 
-
-    handleCloseModal = ()=>{
+   ///handle close view review modal
+    handleCloseModal = (reviewId)=>{
         this.setState({
             reviewModal: false
         })
         this.setState({
-            reviewsViewModal: false
+            reviewsViewModal: false,
         })
+        // this.setState({
+        //     reviewid: reviewId
+        // })
     };
+
 
     //viewreviewsModal  
 
     render() { 
        
-    //    const {search} = this.state;
-    //    const filteredBooks = books.filter(book=>{
-    //        return book.title.toLowerCase().indexof(search.toLocaleLowerCase()) !== -1
+       let {search} = this.state;
+       let filteredBooks = this.state.books.filter((book)=>{
+          return book.title.toLowerCase().indexOf(search.toLowerCase()) !== -1;
+       })
+    //    .filter(book=>{
+        //    alert(this.state.books.title);
+        //    return book.title.toLowerCase().indexof(search.toLocaleLowerCase()) !== -1
     //    }) 
 
         return (
@@ -222,13 +256,15 @@ export default class Dashboard extends Component {
         {/* viewreviewsmodal */}
             
             <Modal isOpen={this.state.reviewsViewModal} toggle={this.toggleReviews.bind(this)}>
-                <ModalHeader toggle={this.handleCloseModal.bind(this)}>Reviews</ModalHeader>
+            <ModalHeader  toggle={this.handleCloseModal.bind(this)}>Reviews</ModalHeader>     
+               
                 <ModalBody>
                 <Table bordered hover striped>
                             <thead className="bg-info text-white text-center">
                                 <tr>
                                     <th>Reviewed By</th>
-                                    {/* <th>Description</th> */}
+                                    <th>Description</th>
+                                    {/* <th>Close</th> */}
                                 </tr>    
                             </thead> 
                             <tbody className="responsive text-center">
@@ -242,12 +278,20 @@ export default class Dashboard extends Component {
                                     <tr key={review._id}>
                                       
                                       <td>
-                                          {review} 
+                                          {review.user.email}                      
                                        </td>
+                                       <td>
+                                           {review.description} 
+                                        </td>
                                         {/* <td>{review.description}</td> */}
-                                    </tr>    
+
+
+                                        {/* <td>
+                                        <Button color="danger" onClick= {this.handleCloseModal.bind(review._id)}>Cancel</Button>
+                                        </td> */}
+                                    </tr> 
                                 ))
-                            }                            
+                            }                           
                             </tbody>  
                     </Table> 
 
@@ -262,10 +306,10 @@ export default class Dashboard extends Component {
             <div style={{"display": this.state.show? "block": "none"}}>
                 <MyToast children={{show:this.state.show, message: "Book Deleted Successfully"}}/>
             </div>    */}
-        {/* <InputGroup className="mt-5" style={{width: "400px"}}>
-        <FontAwesomeIcon className="fa-2x" icon={faSearch} size="lg"/><Input  placeholder="Search Book"
-        onChange={this.handlesearch}></Input>
-        </InputGroup> */}
+        <InputGroup className="mt-5" style={{width: "400px"}}>
+        <FontAwesomeIcon className="fa-2x" icon={faSearch}/><Input  name="search" placeholder="Search Book"
+        value={this.state.search} onChange={this.handlesearch}></Input>
+        </InputGroup>
 
 
         <Card className="mt-5 table-responsive">
@@ -281,7 +325,7 @@ export default class Dashboard extends Component {
                                 <th>Publisher</th>
                                 <th>Format</th>
                                 <th>Published Year</th>
-                                <th>Status</th>
+                                {/* <th>Status</th> */}
                                 <th>Review</th>
                                 <th>Reserve</th>
                             </tr>    
@@ -294,7 +338,7 @@ export default class Dashboard extends Component {
                             <tr align="center">
                                 <td colSpan="9">Books Available.</td>
                             </tr>:
-                            this.state.books.map((book)=>(
+                            filteredBooks.map((book)=>(
                                 <tr key = {book._id}>
                                 
                                     <td> 
@@ -305,7 +349,7 @@ export default class Dashboard extends Component {
                                     <td>{book.publisher}</td>
                                     <td>{book.format}</td>
                                     <td>{book.published_year}</td>
-                                    <td>{book.status}</td>
+                                    {/* <td>{book.status}</td> */}
                                     <td align="center">
                                         <ButtonGroup>
                                             <Button onClick={this.toggleReviewModal.bind(this, book._id)} size="sm" color="outline-primary"><FontAwesomeIcon icon={faPlusCircle}/></Button>

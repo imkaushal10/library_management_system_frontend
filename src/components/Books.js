@@ -151,7 +151,7 @@ export default class Dashboard extends Component {
                                 // </tr>:
                                 this.state.reviews.map((review)=>(
                                     <tr key = {review._id}>
-                                        <td>{review.user}</td>
+                                        <td>{review.user.email}</td>
                                         <td>{review.description}</td>
                                     </tr>    
                                 ))
@@ -183,10 +183,10 @@ export default class Dashboard extends Component {
                             </thead> 
                             <tbody className="responsive text-center">
                             {
-                                // this.state.reviews.length === 0?
-                                // <tr align="center">
-                                //     <td colSpan="9">Reviews Available.</td>
-                                // </tr>:
+                                this.state.bookings.length === 0?
+                                <tr align="center">
+                                    <td colSpan="9">No Reserves.</td>
+                                </tr>:
                                 this.state.bookings.map((booking)=>(
                                     <tr key = {booking._id}>
                             
