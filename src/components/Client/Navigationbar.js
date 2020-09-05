@@ -40,8 +40,7 @@ export default class Navigationbar extends Component {
                     
                     <Nav className="mr-auto">
                     <Link to={"dashboard"} className="nav-link text-muted mr-auto">Books</Link>
-                    <Link to={"login"} className="nav-link text-muted">Details</Link>
-                    
+            
                     </Nav>
                     <Button className="" color="info" onClick={this.handleLogout}>
                         <FontAwesomeIcon icon={faPowerOff}/>Log Out</Button>    
